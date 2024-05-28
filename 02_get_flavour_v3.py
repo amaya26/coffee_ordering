@@ -41,6 +41,24 @@ while True:
     if chosen_flavour in flavours:
         print("You chose {}.".format(chosen_flavour))
 
+        want_toppings = yes_no("Would you like to add any toppings? ").lower()
+        if want_toppings == "yes":
+            while True:
+                chosen_topping = input("Topping number {}: ".format(topping_number))
+                if chosen_topping in extras:
+                    print("You chose {}.".format(chosen_topping.capitalize()))
+                    topping_number += 1
+
+                elif chosen_topping == "menu":
+                    show_menu()
+
+                elif chosen_topping == "xxx":
+                    break
+
+                else:
+                    print("Oops! Looks like '{}' isn't in the menu. "
+                          "Please enter a valid topping. ".format(chosen_topping))
+
     elif chosen_flavour == "menu":
         show_menu()
 
@@ -50,21 +68,3 @@ while True:
     else:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
-
-    want_toppings = yes_no("Would you like to add any toppings? ").lower()
-    if want_toppings == "yes":
-        while True:
-            chosen_topping = input("Topping number {}: ".format(topping_number))
-            if chosen_topping in extras:
-                print("You chose {}.".format(chosen_topping.capitalize()))
-                topping_number += 1
-
-            elif chosen_topping == "menu":
-                show_menu()
-
-            elif chosen_topping == "xxx":
-                break
-
-            else:
-                print("Oops! Looks like '{}' isn't in the menu. "
-                      "Please enter a valid topping. ".format(chosen_topping))
