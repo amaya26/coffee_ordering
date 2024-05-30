@@ -1,27 +1,27 @@
-# lists
-extras = ["Sprinkles","Chocolate sauce", "Crushed peanuts",
-          "Chocolate flakes"]
-flavours=["glazed","cinnamon","peanut butter",
-          "chocolate","jam","custard","caramel"]
+import pandas as pd
+from tabulate import tabulate
+
+flavours = ["Glazed","Cinnamon","Peanut Butter",
+              "Chocolate","Jam","Custard","Caramel"]
+toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
+flavour_prices = [1, 5, 3, 6, 3, 4, 7]
+topping_prices = [1, 5, 3, 6]
 
 # functions go here
 
 def show_menu():
+    flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
+                        columns=['Flavour', 'Price'])
+    topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
+                                columns=['Topping', 'Price'])
+
     print("***** Menu *****\n")
     print("***** Doughnut Flavours *****")
-    print("{} $".format(flavours[0]))
-    print("{} $".format(flavours[1]))
-    print("{} $".format(flavours[2]))
-    print("{} $".format(flavours[3]))
-    print("{} $".format(flavours[4]))
-    print("{} $".format(flavours[5]))
-    print("{} $".format(flavours[6]))
-
+    print(tabulate(flavour_menu, showindex=False,
+                   headers=flavour_menu.columns))
     print("\n***** Extras *****")
-    print("{} $".format(extras[0]))
-    print("{} $".format(extras[1]))
-    print("{} $".format(extras[2]))
-    print("{} $".format(extras[3]))
+    print(tabulate(topping_menu, showindex=False,
+                   headers=topping_menu.columns))
     print()
 
 
@@ -62,32 +62,32 @@ if want_menu == "yes":
     show_menu()
 
 while True:
-    chosen_flavour = input("What flavour doughnut would you like? ").lower()
+    chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
     if chosen_flavour in flavours:
-        print("You chose {}.".format(chosen_flavour))
+        print("You chose a {} dougnut.".format(chosen_flavour.lower()))
 
         want_toppings = yes_no("Would you like to add any toppings? ").lower()
         if want_toppings == "yes":
             while True:
-                chosen_topping = input("Topping number {}: ".format(topping_number))
-                if chosen_topping in extras:
-                    print("You chose {}.".format(chosen_topping.capitalize()))
+                chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
+                if chosen_topping in toppings:
+                    print("You chose to add {}.".format(chosen_topping.lower()))
                     topping_number += 1
 
-                elif chosen_topping == "menu":
+                elif chosen_topping == "Menu":
                     show_menu()
 
-                elif chosen_topping == "xxx":
+                elif chosen_topping == "Xxx":
                     break
 
                 else:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
 
-    elif chosen_flavour == "menu":
+    elif chosen_flavour == "Menu":
         show_menu()
 
-    elif chosen_flavour == "xxx":
+    elif chosen_flavour == "Xxx":
         break
 
     else:
