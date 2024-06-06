@@ -23,15 +23,16 @@ topping_number = 1
 while True:
     chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
     if chosen_flavour in flavours:
-        print("You chose a {} dougnut.".format(chosen_flavour.lower()))
+        print("Flavour: {}".format(chosen_flavour))
 
         want_toppings = yes_no("Would you like to add any toppings? ").lower()
         if want_toppings == "yes":
-            while True:
+            topping_number = 1 # reset the topping counter
+            while topping_number < 4:
                 chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
                 if chosen_topping in toppings:
                     print("You chose to add {}.".format(chosen_topping.lower()))
-                    topping_number += 1
+                    topping_number += 1 # increase the topping counter
 
                 elif chosen_topping == "Menu":
                     show_menu()

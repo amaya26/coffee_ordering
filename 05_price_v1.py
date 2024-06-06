@@ -1,5 +1,4 @@
-
-
+# lists
 flavours = ["Glazed","Cinnamon","Peanut Butter",
               "Chocolate","Jam","Custard","Caramel"]
 flavour_prices = [1, 5, 3, 6, 3, 4, 7]
@@ -11,12 +10,12 @@ while True:
     if chosen_flavour in flavours:
         print("You chose {}.".format(chosen_flavour))
         order.append(chosen_flavour) # add the flavour to the order list
-        item_number = flavours.index(chosen_flavour)
-        price = flavour_prices[item_number]
+        item_number = flavours.index(chosen_flavour) # find the position in the flavour list
+        price = flavour_prices[item_number] # use same position in price list to get the price
         print("${}".format(price))
-        final_price += price
+        final_price += price # add this to the total order price
 
-    elif chosen_flavour == "Xxx":
+    elif chosen_flavour == "Xxx": # once the exit code is entered, print the final order
         final_order = ", ".join(order)
         print("Your order: ")
         print(final_order)
