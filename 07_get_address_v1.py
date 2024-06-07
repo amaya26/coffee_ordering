@@ -1,4 +1,4 @@
-# initializing string
+
 while True:
     address = input("What is your address? ")
     number = any(map(str.isdigit, address))

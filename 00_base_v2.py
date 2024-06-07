@@ -53,6 +53,18 @@ def not_blank(question):
             return response
 
 
+def get_address():
+    while True:
+        address = input("What is your address? ")
+        number = any(map(str.isdigit, address))
+        string = any(map(str.isalpha, address))
+        if number == True and string == True:
+            return address
+
+        else:
+            print("Please enter a valid address. ")
+
+
 # main routine goes here
 final_price = 0
 number_doughnuts = 0
@@ -106,3 +118,8 @@ final_order = ", ".join(order)
 print("Your order: ")
 print(final_order)
 print("Total Cost: ${}".format(final_price))
+
+get_address()
+print("program continues")
+
+
