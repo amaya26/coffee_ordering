@@ -1,7 +1,13 @@
+import pandas as pd
+from tabulate import tabulate
+
 # lists
 flavours = ["Glazed","Cinnamon","Peanut Butter",
               "Chocolate","Jam","Custard","Caramel"]
-flavour_prices = [1, 5, 3, 6, 3, 4, 7]
+toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
+flavour_prices = [5, 5, 6, 6, 5, 6, 7]
+topping_prices = [1, 2, 3, 3]
+
 order = []
 
 final_price = 0
