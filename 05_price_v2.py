@@ -1,3 +1,5 @@
+import pandas as pd
+
 flavours = ["Glazed","Cinnamon","Peanut Butter",
               "Chocolate","Jam","Custard","Caramel"]
 toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
@@ -23,6 +25,7 @@ def yes_no(question):
             print("Please enter yes or no")
 
 while True:
+
     chosen_flavour = input("Flavour: ").capitalize()
     if chosen_flavour in flavours:
         print("You chose {}.".format(chosen_flavour))
@@ -31,19 +34,28 @@ while True:
         order.append(chosen_flavour)
         order.append(price)
         want_toppings = yes_no("Would you like to add any toppings? ").lower()
+
         if want_toppings == "yes":
             topping_number = 1  # reset the topping counter
+            price_topping = 0
+
             while topping_number < 4:
                 chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
                 if chosen_topping in toppings:
                     print("You chose to add {}.".format(chosen_topping.lower()))
                     item_number = toppings.index(chosen_topping)  # find the position in the flavour list
-                    price_topping = topping_prices[item_number]  # use same position in price list to get the price
+                    price_topping += topping_prices[item_number]  # use same position in price list to get the price
                     order.append(chosen_topping)
-                    order.append(price_topping)
                     topping_number += 1  # increase the topping counter
 
                 elif chosen_topping == "Xxx":
+                    if topping_number < 4:
+                        while topping_number < 4:
+                            order.append('-')
+                            topping_number += 1
+
+                    dougnut_price = price_topping + price
+                    order.append(dougnut_price)
                     final_order.append(order.copy())
                     order.clear()
 
@@ -59,4 +71,6 @@ while True:
     else:
         print("Error".format(chosen_flavour))
 
-print(final_order)
+df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
+df.index = df.index + 1
+print(df)
