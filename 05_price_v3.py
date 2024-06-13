@@ -1,30 +1,16 @@
 import pandas as pd
-from tabulate import tabulate
 
 flavours = ["Glazed","Cinnamon","Peanut Butter",
               "Chocolate","Jam","Custard","Caramel"]
 toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
-flavour_prices = [1, 5, 3, 6, 3, 4, 7]
-topping_prices = [1, 5, 3, 6]
+flavour_prices = [5, 5, 6, 6, 5, 6, 7]
+topping_prices = [1, 2, 3, 3]
+
 order = []
 final_order = []
 
-# functions go here
-
-def show_menu():
-    flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
-                        columns=['Flavour', 'Price'])
-    topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
-                                columns=['Topping', 'Price'])
-
-    print("***** Menu *****\n")
-    print("***** Doughnut Flavours *****")
-    print(tabulate(flavour_menu, showindex=False,
-                   headers=flavour_menu.columns))
-    print("\n***** Extras *****")
-    print(tabulate(topping_menu, showindex=False,
-                   headers=topping_menu.columns))
-    print()
+def currency(x):
+    return "${:.2f}".format(x)
 
 
 def yes_no(question):
@@ -40,43 +26,9 @@ def yes_no(question):
         else:
             print("Please enter yes or no")
 
+while True:
 
-# checks that user response is not blank
-def not_blank(question):
-
-    while True:
-        response = input(question)
-
-        # if the response is blank, outputs an error
-        if response == "":
-            print("Sorry this can't be blank. Please try again")
-        else:
-            return response
-
-
-def get_address():
-    while True:
-        address = input("What is your address? ")
-        number = any(map(str.isdigit, address))
-        string = any(map(str.isalpha, address))
-        if number == True and string == True:
-            return address
-
-        else:
-            print("Please enter a valid address. ")
-
-
-# main routine goes here
-number_doughnuts = 0
-
-name = not_blank("What is your name? ").capitalize()
-want_menu = yes_no("Hi {}! Do you want to view the menu? ".format(name))
-
-if want_menu == "yes":
-    show_menu()
-
-while number_doughnuts < 3:
-    chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
+    chosen_flavour = input("Flavour: ").capitalize()
     if chosen_flavour in flavours:
         print("You chose {}.".format(chosen_flavour))
         item_number = flavours.index(chosen_flavour)  # find the position in the flavour list
@@ -126,11 +78,11 @@ while number_doughnuts < 3:
         break
 
     else:
-        print("Oops! Looks like '{}' isn't in the menu. "
-              "Please enter a valid doughnut flavour. ".format(chosen_flavour))
-
-get_address()
+        print("Error")
 
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
+add_dollars = ['Price', 'Total Cost']
+for var_item in add_dollars:
+    df[var_item] = df[var_item].apply(currency)
 print(df)

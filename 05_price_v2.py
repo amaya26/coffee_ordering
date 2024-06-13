@@ -8,7 +8,6 @@ topping_prices = [1, 2, 3, 3]
 
 order = []
 final_order = []
-topping_number = 0
 
 
 def yes_no(question):
@@ -49,10 +48,9 @@ while True:
                     topping_number += 1  # increase the topping counter
 
                 elif chosen_topping == "Xxx":
-                    if topping_number < 4:
-                        while topping_number < 4:
-                            order.append('-')
-                            topping_number += 1
+                    while topping_number < 4:
+                        order.append('-')
+                        topping_number += 1
 
                     dougnut_price = price_topping + price
                     order.append(dougnut_price)
@@ -65,11 +63,19 @@ while True:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
 
-    elif chosen_flavour == "Xxx": # once the exit code is entered, print the final order
+        else:
+            order.append('-')
+            order.append('-')
+            order.append('-')
+            order.append(price)
+            final_order.append(order.copy())
+            order.clear()
+
+    elif chosen_flavour == "Xxx":
         break
 
     else:
-        print("Error".format(chosen_flavour))
+        print("Error")
 
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
