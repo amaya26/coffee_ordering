@@ -1,14 +1,6 @@
 import pandas as pd
 from tabulate import tabulate
 
-flavours = ["Glazed","Cinnamon","Peanut Butter",
-              "Chocolate","Jam","Custard","Caramel"]
-toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
-flavour_prices = [1, 5, 3, 6, 3, 4, 7]
-topping_prices = [1, 5, 3, 6]
-order = []
-final_order = []
-
 # functions go here
 
 def show_menu():
@@ -66,6 +58,20 @@ def get_address():
             print("Please enter a valid address. ")
 
 
+def currency(x):
+    return "${:.2f}".format(x)
+
+
+# lists
+flavours = ["Glazed","Cinnamon","Peanut Butter",
+              "Chocolate","Jam","Custard","Caramel"]
+toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
+flavour_prices = [1, 5, 3, 6, 3, 4, 7]
+topping_prices = [1, 5, 3, 6]
+order = []
+final_order = []
+
+
 # main routine goes here
 number_doughnuts = 0
 
@@ -75,7 +81,7 @@ want_menu = yes_no("Hi {}! Do you want to view the menu? ".format(name))
 if want_menu == "yes":
     show_menu()
 
-while number_doughnuts < 3:
+while number_doughnuts < 10:
     chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
     if chosen_flavour in flavours:
         print("You chose {}.".format(chosen_flavour))
@@ -110,9 +116,17 @@ while number_doughnuts < 3:
 
                     break
 
+                elif chosen_topping == "Menu":
+                    show_menu()
+
                 else:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
+
+                dougnut_price = price_topping + price
+                order.append(dougnut_price)
+                final_order.append(order.copy())
+                order.clear()
 
         else:
             order.append('-')
@@ -125,6 +139,9 @@ while number_doughnuts < 3:
     elif chosen_flavour == "Xxx":
         break
 
+    elif chosen_flavour == "Menu":
+        show_menu()
+
     else:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
@@ -133,4 +150,7 @@ get_address()
 
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
+add_dollars = ['Price', 'Total Cost']
+for var_item in add_dollars:
+    df[var_item] = df[var_item].apply(currency)
 print(df)
