@@ -1,3 +1,4 @@
+from datetime import date
 import pandas as pd
 from tabulate import tabulate
 
@@ -61,6 +62,19 @@ def get_address():
 def currency(x):
     return "${:.2f}".format(x)
 
+
+def cash_credit(question):
+    while True:
+        response = input(question).lower()
+
+        if response == "cash" or response == "ca":
+            return "cash"
+
+        elif response == "credit" or response == "cr":
+            return "credit"
+
+        else:
+            print("Please enter a valid payment method")
 
 # lists
 flavours = ["Glazed","Cinnamon","Peanut Butter",
@@ -148,12 +162,69 @@ while number_doughnuts < 10:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
 
-get_address()
-
 
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
+final_cost = df['Total Cost'].sum()
 add_dollars = ['Price', 'Total Cost']
 for var_item in add_dollars:
     df[var_item] = df[var_item].apply(currency)
 print(df)
+print("Your total cost is: ${:.2f}".format(final_cost))
+
+delivery = yes_no("Would you like your order delivered? ")
+if delivery == "yes":
+    delivery_cost = 4
+    final_cost += 4
+    get_address()
+    print("Delivery cost: ${:.2f}".format(delivery_cost))
+else:
+    print("Your order will be available to pick up in our shop.")
+
+payment_method = cash_credit("Choose a payment method(cash or credit): ")
+if payment_method == "credit":
+    payment_surcharge = final_cost * 0.05
+    final_cost += payment_surcharge
+    print("Card payment surcharge: ${:.2f}".format(payment_surcharge))
+
+
+print("Total Payment: ${:.2f}".format(final_cost))
+print("Your order is being processed now.")
+
+# **** get current date for heading and filename ****
+# get today's date
+today = date.today()
+
+# get day, month and year as individual strings
+day = today.strftime("%d")
+month = today.strftime("%m")
+year = today.strftime("%Y")
+
+heading = "\n---- {}'s Doughnut Order ({}/{}/{}) ---- \n".format(name,day, month, year)
+filename = "Order_{}_{}_{}".format(year, month, day)
+
+# change frame to a string so that we can export it to file
+order_string = pd.DataFrame.to_string(df)
+
+extra_costs_heading = "\nExtra Costs "
+
+extra_delivery = "Delivery Fee: ${:.2f}".format(delivery_cost)
+extra_payment = "Payment Surcharge: ${:.2f}".format(payment_surcharge)
+
+total_heading = "\nOrder Total "
+total_text = "Total Cost: ${:.2f}".format(final_cost)
+
+to_write = [heading, order_string, extra_costs_heading, extra_delivery,
+            extra_payment, total_heading, total_text]
+
+# write output to file
+# create file to hold data (add .txt extension)
+write_to = "{}.txt".format(filename)
+text_file = open(write_to, "w+")
+
+for item in to_write:
+    text_file.write(item)
+    text_file.write("\n")
+
+# close file
+text_file.close()
