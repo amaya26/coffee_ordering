@@ -43,6 +43,7 @@ while True:
             price_topping = 0
 
             while topping_number < 4:
+                quit = False
                 chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
                 if chosen_topping in toppings:
                     print("You chose to add {}.".format(chosen_topping.lower()))

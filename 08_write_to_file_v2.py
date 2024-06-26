@@ -1,6 +1,6 @@
+from datetime import date
 import pandas as pd
 from tabulate import tabulate
-from datetime import date
 
 # functions go here
 
@@ -63,17 +63,6 @@ def currency(x):
     return "${:.2f}".format(x)
 
 
-def num_check(question, error):
-    valid = False
-    while not valid:
-
-        response = input(question)
-        if response.isdigit():
-            return response
-        else:
-            print(error)
-
-
 def cash_credit(question):
     while True:
         response = input(question).lower()
@@ -109,7 +98,6 @@ if want_menu == "yes":
 while number_doughnuts < 10:
     chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
     if chosen_flavour in flavours:
-        number_doughnuts += 1
         print("You chose {}.".format(chosen_flavour))
         item_number = flavours.index(chosen_flavour)  # find the position in the flavour list
         price = flavour_prices[item_number]  # use same position in price list to get the price
@@ -122,7 +110,6 @@ while number_doughnuts < 10:
             price_topping = 0
 
             while topping_number < 4:
-                quit = False
                 chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
                 if chosen_topping in toppings:
                     print("You chose to add {}.".format(chosen_topping.lower()))
@@ -157,7 +144,7 @@ while number_doughnuts < 10:
                 final_order.append(order.copy())
                 order.clear()
 
-        elif want_toppings == "no":
+        else:
             order.append('-')
             order.append('-')
             order.append('-')
@@ -175,7 +162,7 @@ while number_doughnuts < 10:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
 
-print(final_order)
+
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
 final_cost = df['Total Cost'].sum()
@@ -189,9 +176,8 @@ delivery = yes_no("Would you like your order delivered? ")
 if delivery == "yes":
     delivery_cost = 4
     final_cost += 4
-    address = get_address()
+    get_address()
     print("Delivery cost: ${:.2f}".format(delivery_cost))
-    phone_number = num_check("What is your phone number? ", "Please enter a number.")
 else:
     print("Your order will be available to pick up in our shop.")
 

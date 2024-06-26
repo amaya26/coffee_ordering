@@ -175,7 +175,6 @@ while number_doughnuts < 10:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
 
-print(final_order)
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
 final_cost = df['Total Cost'].sum()
@@ -184,6 +183,16 @@ for var_item in add_dollars:
     df[var_item] = df[var_item].apply(currency)
 print(df)
 print("Your total cost is: ${:.2f}".format(final_cost))
+while True:
+    confirm_cancel = input("Please cancel or confirm your order? ").lower()
+    if confirm_cancel == "cancel":
+        print("Order cancelled")
+        exit()
+    elif confirm_cancel == "confirm":
+        print("You have confirmed your order.")
+        break
+    else:
+        print("Please type either cancel or confirm. ")
 
 delivery = yes_no("Would you like your order delivered? ")
 if delivery == "yes":
@@ -215,7 +224,7 @@ month = today.strftime("%m")
 year = today.strftime("%Y")
 
 heading = "\n---- {}'s Doughnut Order ({}/{}/{}) ---- \n".format(name,day, month, year)
-filename = "Order_{}_{}_{}".format(year, month, day)
+filename = "Order_{}_{}_{}".format(day, month, year)
 
 # change frame to a string so that we can export it to file
 order_string = pd.DataFrame.to_string(df)
