@@ -1,24 +1,8 @@
-flavours=["glazed","cinnamon","peanut butter",
-          "chocolate","jam","custard","caramel"]
-extras = ["sprinkles","chocolate sauce", "crushed peanuts","chocolate flakes"]
-
+flavours = ["Glazed","Cinnamon","Peanut Butter",
+              "Chocolate","Jam","Custard","Caramel"]
+toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
 def show_menu():
-    print("***** Menu *****\n")
-    print("***** Doughnut Flavours *****")
-    print("{} $".format(flavours[0]))
-    print("{} $".format(flavours[1]))
-    print("{} $".format(flavours[2]))
-    print("{} $".format(flavours[3]))
-    print("{} $".format(flavours[4]))
-    print("{} $".format(flavours[5]))
-    print("{} $".format(flavours[6]))
-
-    print("\n***** Extras *****")
-    print("{} $".format(extras[0]))
-    print("{} $".format(extras[1]))
-    print("{} $".format(extras[2]))
-    print("{} $".format(extras[3]))
-    print()
+    print("shows menu")
 
 
 def yes_no(question):
@@ -37,32 +21,34 @@ def yes_no(question):
 
 topping_number = 1
 while True:
-    chosen_flavour = input("What flavour doughnut would you like? ").lower()
+    chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
     if chosen_flavour in flavours:
-        print("You chose {}.".format(chosen_flavour))
+        print("Flavour: {}".format(chosen_flavour))
 
         want_toppings = yes_no("Would you like to add any toppings? ").lower()
         if want_toppings == "yes":
-            while True:
-                chosen_topping = input("Topping number {}: ".format(topping_number))
-                if chosen_topping in extras:
-                    print("You chose {}.".format(chosen_topping.capitalize()))
-                    topping_number += 1
+            topping_number = 1 # reset the topping counter
 
-                elif chosen_topping == "menu":
+            while topping_number < 4:
+                chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
+                if chosen_topping in toppings:
+                    print("You chose to add {}.".format(chosen_topping.lower()))
+                    topping_number += 1 # increase the topping counter
+
+                elif chosen_topping == "Menu":
                     show_menu()
 
-                elif chosen_topping == "xxx":
+                elif chosen_topping == "Xxx":
                     break
 
                 else:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
 
-    elif chosen_flavour == "menu":
+    elif chosen_flavour == "Menu":
         show_menu()
 
-    elif chosen_flavour == "xxx":
+    elif chosen_flavour == "Xxx":
         break
 
     else:

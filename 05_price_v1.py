@@ -1,5 +1,3 @@
-import pandas as pd
-from tabulate import tabulate
 
 # lists
 flavours = ["Glazed","Cinnamon","Peanut Butter",

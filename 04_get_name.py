@@ -13,4 +13,4 @@ def not_blank(question):
 
 while True:
     name = not_blank("What is your name? ").capitalize()
-    print("{}.".format(name))
+    print("Hi {}.".format(name))
