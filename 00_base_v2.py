@@ -3,22 +3,25 @@ from tabulate import tabulate
 
 # functions go here
 
+# displays the menu in a dataframe
 def show_menu():
+    # using lists to create menu dataframe
     flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
-                        columns=['Flavour', 'Price'])
+                                columns=['Flavour', 'Price'])  # dataframe for flavours
     topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
-                                columns=['Topping', 'Price'])
+                                columns=['Topping', 'Price'])  # dataframe for toppings
 
     print("***** Menu *****\n")
     print("***** Doughnut Flavours *****")
-    print(tabulate(flavour_menu, showindex=False,
+    print(tabulate(flavour_menu, showindex=False,  # remove index
                    headers=flavour_menu.columns))
     print("\n***** Extras *****")
     print(tabulate(topping_menu, showindex=False,
-                   headers=topping_menu.columns))
+                   headers=topping_menu.columns))  # change the column headers
     print()
 
 
+# checks responses for a yes or no question
 def yes_no(question):
     while True:
         response = input(question).lower()
@@ -46,6 +49,7 @@ def not_blank(question):
             return response
 
 
+# checks the address has both numbers and letters
 def get_address():
     while True:
         address = input("What is your address? ")
@@ -58,6 +62,7 @@ def get_address():
             print("Please enter a valid address. ")
 
 
+# change numbers into a currency format
 def currency(x):
     return "${:.2f}".format(x)
 
@@ -150,10 +155,12 @@ while number_doughnuts < 10:
 
 get_address()
 
-
+# use the order list to make a dataframe
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
 add_dollars = ['Price', 'Total Cost']
+# add dollar symbols
 for var_item in add_dollars:
     df[var_item] = df[var_item].apply(currency)
+
 print(df)

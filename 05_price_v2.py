@@ -9,6 +9,9 @@ topping_prices = [1, 2, 3, 3]
 order = []
 final_order = []
 
+def currency(x):
+    return "${:.2f}".format(x)
+
 
 def yes_no(question):
     while True:
@@ -23,6 +26,7 @@ def yes_no(question):
         else:
             print("Please enter yes or no")
 
+doughnut_price = 0
 while True:
 
     chosen_flavour = input("Flavour: ").capitalize()
@@ -63,6 +67,7 @@ while True:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
 
+
         else:
             order.append('-')
             order.append('-')
@@ -79,4 +84,7 @@ while True:
 
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
+add_dollars = ['Price', 'Total Cost']
+for var_item in add_dollars:
+    df[var_item] = df[var_item].apply(currency)
 print(df)

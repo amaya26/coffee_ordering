@@ -1,2 +1,6 @@
-for x in range (0,3):
-    print("Hey there!")
+from datetime import datetime
+
+now = datetime.now()
+
+current_time = now.strftime("%H:%M:%S")
+print("Current Time =", current_time)

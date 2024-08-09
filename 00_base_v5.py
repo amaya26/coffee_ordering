@@ -9,10 +9,9 @@ def run():
     final_order = [] # clear from previous orders
 
     number_doughnuts = 0 # set the counter to 0
-    print("\nWelcome to *super cool business name*. You can order up to 10 doughnuts. At any time "
+    print("\nWelcome to Dancing Doughnuts. You can order up to 10 doughnuts. At any time "
           "type 'Menu' to view the menu, or 'xxx' to quit. \n")
     name = check_name("What name would you like to place the order under? ")
-    name_list.append(name) # add to the name list to ensure each order is under a different name
     want_menu = yes_no("\nHi {}! Do you want to view the menu? ".format(name))
 
     if want_menu == "yes":
@@ -21,26 +20,26 @@ def run():
     while number_doughnuts < 10: # repeat until limit reached
         chosen_flavour = input("\nWhat flavour doughnut would you like? ").capitalize() # capitalize to allow
         # comparison against lists
-        if chosen_flavour in flavours:
+        if chosen_flavour in flavours_list:
             number_doughnuts += 1
             print("{} doughnut added to order.".format(chosen_flavour))
-            item_number = flavours.index(chosen_flavour)  # find the position in the flavour list
-            price = flavour_prices[item_number]  # use same position in price list to get the price
+            item_number = flavours_list.index(chosen_flavour)  # find the position in the flavour list
+            item_price = flavour_prices[item_number]  # use same position in price list to get the price
             order.append(chosen_flavour)
-            order.append(price)
+            order.append(item_price)
             want_toppings = yes_no("\nWould you like to add any toppings? ").lower()
 
             if want_toppings == "yes":
                 topping_number = 1  # reset the topping counter
-                price_topping = 0
+                total_price_toppings = 0
 
                 while topping_number < 4: # repeat until max doughnuts reached
                     quit = False
                     chosen_topping = input("\nTopping number {}: ".format(topping_number)).capitalize()
-                    if chosen_topping in toppings:
+                    if chosen_topping in toppings_list:
                         print("You chose to add {}.".format(chosen_topping.lower()))
-                        item_number = toppings.index(chosen_topping)  # find the position in the flavour list
-                        price_topping += topping_prices[item_number]  # use same position in price list to get the price
+                        item_number = toppings_list.index(chosen_topping)  # find the position in the flavour list
+                        total_price_toppings += topping_prices[item_number]  # use same position in price list to get the price
                         order.append(chosen_topping)
                         topping_number += 1  # increase the topping counter
 
@@ -50,7 +49,7 @@ def run():
                             order.append('-') # add dashes in place of toppings in the dataframe list
                             topping_number += 1
 
-                        dougnut_price = price_topping + price # work out total price
+                        dougnut_price = total_price_toppings + item_price # work out total price
                         order.append(dougnut_price) # add price to the order list
                         final_order.append(order.copy()) # add info for this doughnut to the final order
                         order.clear() # clear for next doughnut
@@ -65,20 +64,26 @@ def run():
                               "Please enter a valid topping. ".format(chosen_topping))
 
                 if quit == False: # if the user orders all 3 toppings without quitting
-                    dougnut_price = price_topping + price
-                    order.append(dougnut_price)
+                    dougnut_price = price_topping + price  # get total price for doughnut
+                    order.append(dougnut_price)  # add price to order list for this dougnut
                     final_order.append(order.copy())
-                    order.clear()
+                    # add the order (including flavour, toppings and price) to final
+                    # order list
+                    order.clear()  # clear for next order
 
-            elif want_toppings == "no":
+            elif want_toppings == "no": # if no toppings are ordered
                 for x in range (0,3):
-                    order.append('-')
-                order.append(price)
+                    order.append('-') # add placeholders to the dataframe
+                order.append(item_price)
                 final_order.append(order.copy())
                 order.clear()
 
         elif chosen_flavour == "Xxx":
-            break
+            if number_doughnuts == 0:
+                print("Your order has been cancelled.")
+                again()
+            else:
+                break
 
         elif chosen_flavour == "Menu":
             show_menu()
@@ -118,9 +123,10 @@ def run():
         confirm_cancel = input("\nPlease cancel or confirm your order? ").lower()
         if confirm_cancel == "cancel":
             print("Order cancelled. ")
-            exit()
+            again()
         elif confirm_cancel == "confirm":
             print("Your order is being processed now.")
+            name_list.append(name)  # add to the name list to ensure each order is under a different name
             break
         else:
             print("Please type either cancel or confirm. ")
@@ -180,21 +186,33 @@ def run():
     text_file.close()
 
 
+# ask user if they want to order again
+def again():
+    while True:
+        again = yes_no("\nWould you like to place a new order?")
+        if again == "yes":
+            run()  # order again
+        else:
+            print("Thank you for ordering from Dancing Doughnuts.")
+            exit()  # quit the program
+
+
 # displays the menu in a dataframe
 def show_menu():
-    flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
-                        columns=['Flavour', 'Price'])
-    topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
-                                columns=['Topping', 'Price'])
-    add_dollars = ['Price']
+    # using lists to create a menu dataframe
+    flavour_menu = pd.DataFrame(list(zip(flavours_list, flavour_prices)),
+                        columns=['Flavour', 'Price']) # dataframe for flavours
+    topping_menu = pd.DataFrame(list(zip(toppings_list, topping_prices)),
+                                columns=['Topping', 'Price']) # dataframe for toppings
+    add_dollars = ['Price'] # format both price columns with dollar symbols
     for var_item in add_dollars:
         flavour_menu[var_item] = flavour_menu[var_item].apply(currency)
         topping_menu[var_item] = topping_menu[var_item].apply(currency)
 
     print("\n***** Menu *****\n")
     print("***** Doughnut Flavours *****")
-    print(tabulate(flavour_menu, showindex=False,
-                   headers=flavour_menu.columns))
+    print(tabulate(flavour_menu, showindex=False, # remove index
+                   headers=flavour_menu.columns)) # change the column headers
     print("\n***** Extras *****")
     print(tabulate(topping_menu, showindex=False,
                    headers=topping_menu.columns))
@@ -237,11 +255,11 @@ def get_address():
         address = input("What is your address? ")
         number = any(map(str.isdigit, address))
         string = any(map(str.isalpha, address))
-        if number == True and string == True:
+        if number == True and string == True: # if input contains both numbers and letters
             return address
 
         else:
-            print("Please enter a valid address. ")
+            print("Please enter a valid address. ") # if response is invalid, print an error
 
 
 # change numbers into a currency format
@@ -255,7 +273,7 @@ def num_check(question, error):
     while not valid:
 
         response = input(question)
-        if response.isdigit():
+        if response.isdigit(): # if input is a number
             return response
         else:
             print(error)
@@ -264,7 +282,7 @@ def num_check(question, error):
 # Check user response to the cash or credit question
 def cash_credit(question):
     while True:
-        response = input(question).lower()
+        response = input(question).lower() # convert user input to lowercase
 
         if response == "cash" or response == "ca":
             return "cash"
@@ -273,13 +291,13 @@ def cash_credit(question):
             return "credit"
 
         else:
-            print("Please enter a valid payment method")
+            print("Please enter a valid payment method") # if invalid input, print error
 
 
 # lists
-flavours = ["Glazed", "Cinnamon", "Peanut Butter",
+flavours_list = ["Glazed", "Cinnamon", "Peanut Butter",
             "Chocolate", "Jam", "Custard", "Caramel"]
-toppings = ["Sprinkles", "Chocolate sauce", "Crushed peanuts", "Chocolate flakes","Pink icing"]
+toppings_list = ["Sprinkles", "Chocolate sauce", "Crushed peanuts", "Chocolate flakes","Pink icing"]
 flavour_prices = [1, 5, 3, 6, 3, 4, 7]
 topping_prices = [1, 2, 3, 2, 3]
 order = []
@@ -290,12 +308,6 @@ name_list = []
 run()
 
 # once order is complete, ask user if they want to order again
-while True:
-    again = yes_no("\nWould you like to place another order?")
-    if again == "yes":
-        run() # order again
-    else:
-        print("Thank you for ordering from *super cool business name*.")
-        exit() # quit the program
+again()
 
 

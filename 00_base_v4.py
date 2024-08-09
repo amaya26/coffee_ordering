@@ -4,22 +4,25 @@ from datetime import date
 
 # functions go here
 
+# displays the menu in a dataframe
 def show_menu():
+    # using lists to create menu dataframe
     flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
-                        columns=['Flavour', 'Price'])
+                                columns=['Flavour', 'Price'])  # dataframe for flavours
     topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
-                                columns=['Topping', 'Price'])
+                                columns=['Topping', 'Price'])  # dataframe for toppings
 
     print("***** Menu *****\n")
     print("***** Doughnut Flavours *****")
-    print(tabulate(flavour_menu, showindex=False,
+    print(tabulate(flavour_menu, showindex=False,  # remove index
                    headers=flavour_menu.columns))
     print("\n***** Extras *****")
     print(tabulate(topping_menu, showindex=False,
-                   headers=topping_menu.columns))
+                   headers=topping_menu.columns))  # change the column headers
     print()
 
 
+# checks responses for a yes or no question
 def yes_no(question):
     while True:
         response = input(question).lower()
@@ -47,6 +50,7 @@ def not_blank(question):
             return response
 
 
+# checks the address has both numbers and letters
 def get_address():
     while True:
         address = input("What is your address? ")
@@ -59,10 +63,12 @@ def get_address():
             print("Please enter a valid address. ")
 
 
+# change numbers into a currency format
 def currency(x):
     return "${:.2f}".format(x)
 
 
+# checks that the phone number only contains numbers
 def num_check(question, error):
     valid = False
     while not valid:
@@ -74,6 +80,7 @@ def num_check(question, error):
             print(error)
 
 
+# Check user response to the cash or credit question
 def cash_credit(question):
     while True:
         response = input(question).lower()
@@ -137,10 +144,12 @@ while number_doughnuts < 10:
                         order.append('-')
                         topping_number += 1
 
-                    dougnut_price = price_topping + price
-                    order.append(dougnut_price)
+                    dougnut_price = price_topping + price  # get total price for doughnut
+                    order.append(dougnut_price)  # add price to order list for this dougnut
                     final_order.append(order.copy())
-                    order.clear()
+                    # add the order (including flavour, toppings and price) to final
+                    # order list
+                    order.clear()  # clear for next order
 
                     break
 
@@ -152,10 +161,12 @@ while number_doughnuts < 10:
                           "Please enter a valid topping. ".format(chosen_topping))
 
             if quit == False:
-                dougnut_price = price_topping + price
-                order.append(dougnut_price)
+                dougnut_price = price_topping + price  # get total price for doughnut
+                order.append(dougnut_price)  # add price to order list for this dougnut
                 final_order.append(order.copy())
-                order.clear()
+                # add the order (including flavour, toppings and price) to final
+                # order list
+                order.clear()  # clear for next order
 
         elif want_toppings == "no":
             order.append('-')
@@ -175,10 +186,12 @@ while number_doughnuts < 10:
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
 
+# create data frame of order
 df = pd.DataFrame(final_order, columns=['Flavour', 'Price', 'Topping 1', 'Topping 2', 'Topping 3', 'Total Cost'])
 df.index = df.index + 1
 final_cost = df['Total Cost'].sum()
 add_dollars = ['Price', 'Total Cost']
+# format prices in dollars
 for var_item in add_dollars:
     df[var_item] = df[var_item].apply(currency)
 print(df)
@@ -187,7 +200,7 @@ while True:
     confirm_cancel = input("Please cancel or confirm your order? ").lower()
     if confirm_cancel == "cancel":
         print("Order cancelled")
-        exit()
+        exit() # quit program
     elif confirm_cancel == "confirm":
         print("You have confirmed your order.")
         break
@@ -197,7 +210,7 @@ while True:
 delivery = yes_no("Would you like your order delivered? ")
 if delivery == "yes":
     delivery_cost = 4
-    final_cost += 4
+    final_cost += 4 # add delivery cost
     address = get_address()
     print("Delivery cost: ${:.2f}".format(delivery_cost))
     phone_number = num_check("What is your phone number? ", "Please enter a number.")
@@ -207,7 +220,7 @@ else:
 payment_method = cash_credit("Choose a payment method(cash or credit): ")
 if payment_method == "credit":
     payment_surcharge = final_cost * 0.05
-    final_cost += payment_surcharge
+    final_cost += payment_surcharge # calculate and add payment surcharge
     print("Card payment surcharge: ${:.2f}".format(payment_surcharge))
 
 
@@ -226,7 +239,7 @@ year = today.strftime("%Y")
 heading = "\n---- {}'s Doughnut Order ({}/{}/{}) ---- \n".format(name,day, month, year)
 filename = "Order_{}_{}_{}".format(day, month, year)
 
-# change frame to a string so that we can export it to file
+# change frame to a string to export it to file
 order_string = pd.DataFrame.to_string(df)
 
 extra_costs_heading = "\n------- Extra Costs ------- "
@@ -234,9 +247,10 @@ extra_costs_heading = "\n------- Extra Costs ------- "
 to_write = [heading, order_string, extra_costs_heading]
 
 if delivery == "yes":
+    # add delivery section to file
     extra_delivery = "Delivery Fee: ${:.2f}".format(delivery_cost)
     printed_address = "Delivery Address: {}".format(address)
-    printed_phone_number = "Phone number: {}".format(phone_number) # come back to thisssss
+    printed_phone_number = "Phone number: {}".format(phone_number)
     to_write.append(extra_delivery)
     to_write.append(printed_address)
     to_write.append(printed_phone_number)

@@ -1,6 +1,8 @@
+
 import pandas as pd
 from tabulate import tabulate
 
+# lists
 flavours = ["Glazed","Cinnamon","Peanut Butter",
               "Chocolate","Jam","Custard","Caramel"]
 toppings = ["Sprinkles","Chocolate sauce", "Crushed peanuts","Chocolate flakes"]
@@ -10,22 +12,25 @@ order = []
 
 # functions go here
 
+# prints the menu
 def show_menu():
+    # using lists to create menu dataframe
     flavour_menu = pd.DataFrame(list(zip(flavours, flavour_prices)),
-                        columns=['Flavour', 'Price'])
+                        columns=['Flavour', 'Price']) # dataframe for flavours
     topping_menu = pd.DataFrame(list(zip(toppings, topping_prices)),
-                                columns=['Topping', 'Price'])
+                                columns=['Topping', 'Price']) # dataframe for toppings
 
     print("***** Menu *****\n")
     print("***** Doughnut Flavours *****")
-    print(tabulate(flavour_menu, showindex=False,
+    print(tabulate(flavour_menu, showindex=False, # remove index
                    headers=flavour_menu.columns))
     print("\n***** Extras *****")
     print(tabulate(topping_menu, showindex=False,
-                   headers=topping_menu.columns))
+                   headers=topping_menu.columns)) # change the column headers
     print()
 
 
+# checks responses for a yes or no question
 def yes_no(question):
     while True:
         response = input(question).lower()
@@ -56,14 +61,18 @@ def not_blank(question):
 # main routine goes here
 final_price = 0
 
+# get user name
 name = not_blank("What is your name? ").capitalize()
+
 want_menu = yes_no("Do you want to view the menu? ")
 
 if want_menu == "yes":
     show_menu()
 
 while True:
+
     chosen_flavour = input("What flavour doughnut would you like? ").capitalize()
+
     if chosen_flavour in flavours:
         order.append(chosen_flavour)  # add the flavour to the order list
         item_number = flavours.index(chosen_flavour)  # find the position in the flavour list
@@ -94,6 +103,7 @@ while True:
         show_menu()
 
     elif chosen_flavour == "Xxx":
+        # if user quits, print their order
         final_order = ", ".join(order)
         print("Your order: ")
         print(final_order)
@@ -101,6 +111,7 @@ while True:
         break
 
     else:
+        # error message
         print("Oops! Looks like '{}' isn't in the menu. "
               "Please enter a valid doughnut flavour. ".format(chosen_flavour))
 

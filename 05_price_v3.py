@@ -43,6 +43,7 @@ while True:
             price_topping = 0
 
             while topping_number < 4:
+                quit = False
                 chosen_topping = input("Topping number {}: ".format(topping_number)).capitalize()
                 if chosen_topping in toppings:
                     print("You chose to add {}.".format(chosen_topping.lower()))
@@ -52,6 +53,7 @@ while True:
                     topping_number += 1  # increase the topping counter
 
                 elif chosen_topping == "Xxx":
+                    quit = True
                     while topping_number < 4:
                         order.append('-')
                         topping_number += 1
@@ -67,6 +69,11 @@ while True:
                     print("Oops! Looks like '{}' isn't in the menu. "
                           "Please enter a valid topping. ".format(chosen_topping))
 
+            if quit == False:
+                dougnut_price = price_topping + price
+                order.append(dougnut_price)
+                final_order.append(order.copy())
+                order.clear()
 
         else:
             order.append('-')
