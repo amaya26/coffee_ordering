@@ -1,5 +1,3 @@
-
-
 # checks a response has a valid input
 def get_response(question, valid_responses, error):
     while True:
@@ -12,7 +10,8 @@ def get_response(question, valid_responses, error):
             print(error)
 
 while True:
-    answer = yes_no("yes or no? ", ["yes", "y", "n", "no"], "error please enter yes or no")
-    print(answer)
-
-    cash_credit = yes_no("how do you want to pay?", ["cash", "credit"], "error plkease enter cash or credit")
+    answer = get_response("Yes or no? ", ["yes", "no", "y", "n"], "Please enter yes or no. ")
+    if answer == "yes" or answer == "y":
+        print("yes")
+    else:
+        print("no")
